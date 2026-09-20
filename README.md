@@ -22,6 +22,10 @@ The part that took the work is not the retrieval. It is the refusal.
                               answer + sources   a person, with a ticket
 ```
 
+And here is the same thing as it actually runs, drawn from `workflow.json`:
+
+![One question, end to end](docs/images/workflow-answer.svg)
+
 ## How a question goes
 
 The question arrives at a webhook — from the chat page this repo serves, or from anything else that
@@ -101,6 +105,13 @@ Then open the workflow and run **Index now**, or `curl` the re-index webhook. Th
 python scripts/run_tests.py   # 24 checks against your own running instance
 python scripts/run_evals.py   # the 25 questions, and a row in Eval Runs
 ```
+
+## Indexing
+
+![An indexing pass](docs/images/workflow-index.svg)
+
+Both pictures are generated from `workflow.json` by `scripts/render_graph.py`, so they cannot drift
+away from the graph they describe. A screenshot of the editor goes stale the moment a node moves.
 
 ## Pointing it at your own documents
 
