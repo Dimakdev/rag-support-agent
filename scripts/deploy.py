@@ -163,9 +163,21 @@ def main() -> None:
     if args.dry:
         return
 
+    # Activating is not optional: an inactive workflow registers no webhooks, so the chat page and
+    # the ask endpoint answer 404 and the whole thing looks broken after a clean install.
+    try:
+        n8n.activate(wf_id)
+        print("  activated (the chat page and /webhook/ask are live)")
+    except HttpError as e:
+        print(f"  could not activate it: {e}\n  activate it by hand in the editor, top right.")
+
     save_state(state)
-    print(f"\nopen {env['N8N_BASE_URL'].rstrip('/')}/workflow/{wf_id}")
-    print("then: run 'Index now' by hand, or python scripts/run_tests.py")
+    base = env["N8N_BASE_URL"].rstrip("/")
+    print(f"\nthe workflow   {base}/workflow/{wf_id}")
+    print(f"the chat page  {base}/webhook/chat")
+    print("\nnothing is indexed yet. Run 'Index now' in the editor, or:")
+    print(f"  curl -X POST {base}/webhook/reindex -H \"x-webhook-secret: "
+          f"{state['webhook_secret']}\" -H \"Content-Type: application/json\" -d \"{{}}\"")
 
 
 if __name__ == "__main__":
