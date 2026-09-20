@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff; --fg: #1b1b1b; --muted: #6b6b6b; --line: #e3e3e3;
+    --mine: #f1f3f5; --source: #f7f8f9; --accent: #2f6f4f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #16181a; --fg: #e9e9e9; --muted: #9a9a9a; --line: #2a2d30;
+            --mine: #212528; --source: #1c1f22; --accent: #7fc0a0; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg);
+         font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 24px 16px 140px; }
+  header { border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 20px; }
+  h1 { font-size: 17px; margin: 0 0 2px; font-weight: 600; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  .turn { margin: 18px 0; }
+  .q { background: var(--mine); border-radius: 12px; padding: 10px 14px; display: inline-block;
+       max-width: 85%; }
+  .a { margin-top: 12px; white-space: pre-wrap; }
+  .sources { margin-top: 14px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .sources h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em;
+                color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+  .source { background: var(--source); border-left: 2px solid var(--accent); border-radius: 0 8px 8px 0;
+            padding: 8px 12px; margin-bottom: 8px; }
+  .source .where { font-size: 13px; font-weight: 600; }
+  .source .quote { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .ticket { font-size: 13px; color: var(--muted); margin-top: 10px; }
+  .thinking { color: var(--muted); font-size: 14px; }
+  form { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg);
+         border-top: 1px solid var(--line); padding: 14px 16px; }
+  .row { max-width: 720px; margin: 0 auto; display: flex; gap: 8px; }
+  input { flex: 1; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px;
+          background: var(--bg); color: var(--fg); font: inherit; }
+  input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  button { padding: 11px 18px; border: 0; border-radius: 10px; background: var(--accent);
+           color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: default; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Support</h1>
+    <p>Answers come from the documentation, with the place they came from underneath.</p>
+  </header>
+  <div id="thread"></div>
+</main>
+
+<form id="form">
+  <div class="row">
+    <input id="q" autocomplete="off" placeholder="Ask about the product&hellip;" autofocus>
+    <button id="send" type="submit">Ask</button>
+  </div>
+</form>
+
+<script>
+  // Relative on purpose: the page is served by the same n8n that answers, so it works on localhost,
+  // behind a tunnel and behind a reverse proxy without anything being configured twice.
+  var ASK = "../webhook/ask".replace("../", "/");
+  // Substituted when the workflow is deployed. Anyone who can open this page can read it — which is
+  // the honest cost of a page with no login, and it is written down in LIMITATIONS.md.
+  var SECRET = "__WEBHOOK_SECRET__";
+  // One session for as long as this tab is open: enough for a follow-up like "and monthly?" to be
+  // understood, and it disappears with the tab.
+  var SESSION = "web-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+
+  var thread = document.getElementById("thread");
+  var form = document.getElementById("form");
+  var input = document.getElementById("q");
+  var send = document.getElementById("send");
+
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  // Enter submits. A form with one text input and a submit button does this on its own in every
+  // browser — except when the keystroke is synthetic, which is how this page is tested. Three lines
+  // to make both paths identical is cheaper than a demo where the obvious key sometimes does nothing.
+  input.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" || e.shiftKey || e.isComposing) return;
+    e.preventDefault();
+    if (form.requestSubmit) form.requestSubmit();
+    else form.dispatchEvent(new Event("submit", { cancelable: true }));
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var question = input.value.trim();
+    if (!question) return;
+    input.value = "";
+    send.disabled = true;
+
+    var turn = el("div", "turn");
+    turn.appendChild(el("div", "q", question));
+    var pending = el("div", "a thinking", "Looking it up…");
+    turn.appendChild(pending);
+    thread.appendChild(turn);
+    window.scrollTo(0, document.body.scrollHeight);
+
+    fetch(ASK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-webhook-secret": SECRET },
+      body: JSON.stringify({ question: question, session_id: SESSION, channel: "web" })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (reply) {
+        turn.removeChild(pending);
+        turn.appendChild(el("div", "a", reply.answer || ""));
+
+        if (reply.sources && reply.sources.length) {
+          var box = el("div", "sources");
+          box.appendChild(el("h2", null, "Sources"));
+          reply.sources.forEach(function (s) {
+            var item = el("div", "source");
+            item.appendChild(el("div", "where", s.section || s.title));
+            item.appendChild(el("div", "quote", "“" + s.quote + "”"));
+            box.appendChild(item);
+          });
+          turn.appendChild(box);
+        }
+        if (reply.ticket) {
+          turn.appendChild(el("div", "ticket", "Passed to a person · " + reply.ticket));
+        }
+      })
+      .catch(function (err) {
+        turn.removeChild(pending);
+        turn.appendChild(el("div", "a", "Could not reach the agent: " + err.message));
+      })
+      .then(function () {
+        send.disabled = false;
+        input.focus();
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+  });
+</script>
+</body>
+</html>

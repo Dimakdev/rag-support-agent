@@ -1,0 +1,43 @@
+# Everything this case needs: n8n and a vector database, on one machine.
+#   docker compose up -d      ->  n8n on http://localhost:5678, Qdrant on http://localhost:6333
+# First visit to n8n creates the owner account. Then: Settings -> n8n API -> create a key -> .env
+#
+# Inside this compose the two containers see each other by service name, so QDRANT_URL is
+# http://qdrant:6333. If your n8n runs somewhere else (a container you started earlier, a hosted
+# instance), set QDRANT_URL in .env to an address that instance can actually reach — on Docker
+# Desktop that is http://host.docker.internal:6333.
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n-rag
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=America/Vancouver
+      - TZ=America/Vancouver
+      # An answer that went wrong is only debuggable if the run was kept.
+      - EXECUTIONS_DATA_SAVE_ON_ERROR=all
+      - EXECUTIONS_DATA_SAVE_ON_SUCCESS=all
+    volumes:
+      - n8n_rag_data:/home/node/.n8n
+    depends_on:
+      - qdrant
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant-rag
+    restart: unless-stopped
+    ports:
+      # 6333 is the REST API and the dashboard at /dashboard. 6334 is gRPC, unused here.
+      - "6333:6333"
+    volumes:
+      - qdrant_rag_data:/qdrant/storage
+
+volumes:
+  n8n_rag_data:
+  qdrant_rag_data:

@@ -1,0 +1,80 @@
+{
+  "name": "Support agent — errors",
+  "nodes": [
+    {
+      "id": "7091079f-e27b-5923-9001-7fc2d1017eb3",
+      "name": "Error trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "29dee10f-a196-539f-9bd7-66fb90b764e7",
+      "name": "Build error alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "jsCode": "// [E1] The error workflow. n8n hands it whatever crashed, in whichever branch, and it turns that\n// into one line a person can act on without opening the editor.\n//\n// It exists because the two branches fail differently and both failures are quiet. A nightly index\n// that dies at three in the morning leaves no one to tell; a question that dies mid-answer has\n// already replied to the person by then. The execution id is the point of the message: it says where\n// the data that caused it is still sitting.\nconst e = $input.first().json;\nconst wf = e.workflow || {};\nconst err = e.execution?.error || e.error || {};\nconst node = err.node?.name || e.execution?.lastNodeExecuted || 'unknown node';\nconst when = DateTime.now().toFormat('dd.MM HH:mm');\n\nconst esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst message = String(err.message || err.description || 'no message').slice(0, 400);\n\n// Which half of the agent broke, in words rather than node names.\nconst branch = /index|chunk|embed|source|point/i.test(node) ? 'indexing'\n  : /ask|answer|context|search|ticket|reply/i.test(node) ? 'answering'\n    : 'unknown branch';\n\nconst text = [\n  `<b>Support agent failed</b> — ${esc(branch)}`,\n  '',\n  `<b>Node:</b> ${esc(node)}`,\n  `<b>Error:</b> ${esc(message)}`,\n  `<b>When:</b> ${when}`,\n  e.execution?.id ? `<b>Execution:</b> ${esc(e.execution.id)}` : '',\n  e.execution?.url ? esc(e.execution.url) : '',\n].filter(Boolean).join('\\n');\n\nreturn [{ json: { text, branch, node, message, workflow: wf.name || '' } }];\n"
+      }
+    },
+    {
+      "id": "8cc5ac30-5795-5e22-a9ed-f718bb266d7c",
+      "name": "Alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "chatId": "__TELEGRAM_CHAT_ID__",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "parse_mode": "HTML"
+        }
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "__TELEGRAM_CRED_ID__",
+          "name": "Telegram bot (rag agent)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Error trigger": {
+      "main": [
+        [
+          {
+            "node": "Build error alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build error alert": {
+      "main": [
+        [
+          {
+            "node": "Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Vancouver"
+  }
+}

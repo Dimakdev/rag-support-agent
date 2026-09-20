@@ -1,0 +1,519 @@
+{
+  "_comment": [
+    "Five tables, and the rule for what belongs here: a row exists when a human looks at it.",
+    "Chunks and vectors live in Qdrant; this base holds sources, runs, conversations, tickets and",
+    "evaluation results. Tables are linked by plain text ids rather than Airtable record links so that",
+    "the workflow can write a ticket without first looking up a record — one call instead of two, and",
+    "nothing breaks when a conversation row was never created."
+  ],
+  "tables": [
+    {
+      "name": "Sources",
+      "description": "Where documents are read from. One row per source; the workflow reads only Active ones.",
+      "fields": [
+        {
+          "name": "Source",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Type",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "markdown"
+              },
+              {
+                "name": "url"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Address",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "Active"
+              },
+              {
+                "name": "Paused"
+              },
+              {
+                "name": "Degrading"
+              },
+              {
+                "name": "Retired"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Last indexed",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Docs",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Chunks",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Failures",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Note",
+          "type": "multilineText"
+        }
+      ]
+    },
+    {
+      "name": "Index Runs",
+      "description": "One row per indexing pass. Cost is in CAD and counts embeddings only.",
+      "fields": [
+        {
+          "name": "Run",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Started",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Docs read",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "New",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Updated",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Retired",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Unchanged",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Seconds",
+          "type": "number",
+          "options": {
+            "precision": 1
+          }
+        },
+        {
+          "name": "Cost",
+          "type": "number",
+          "options": {
+            "precision": 4
+          }
+        },
+        {
+          "name": "Errors",
+          "type": "multilineText"
+        }
+      ]
+    },
+    {
+      "name": "Conversations",
+      "description": "One row per session. Holds the two fields that make a clarify round-trip work.",
+      "fields": [
+        {
+          "name": "Session",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Channel",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "web"
+              },
+              {
+                "name": "eval"
+              },
+              {
+                "name": "api"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Started",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Turns",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Last question",
+          "type": "multilineText"
+        },
+        {
+          "name": "Last outcome",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "answer"
+              },
+              {
+                "name": "clarify"
+              },
+              {
+                "name": "escalate"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Last answer",
+          "type": "multilineText"
+        },
+        {
+          "name": "Cost",
+          "type": "number",
+          "options": {
+            "precision": 4
+          }
+        },
+        {
+          "name": "Last sources",
+          "type": "multilineText"
+        }
+      ]
+    },
+    {
+      "name": "Tickets",
+      "description": "Every escalation. Reason is the useful column: nothing_found means a hole in the documents, not a broken agent.",
+      "fields": [
+        {
+          "name": "Ticket",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Question",
+          "type": "multilineText"
+        },
+        {
+          "name": "Reason",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "nothing_found"
+              },
+              {
+                "name": "low_confidence"
+              },
+              {
+                "name": "citation_mismatch"
+              },
+              {
+                "name": "always_human"
+              },
+              {
+                "name": "budget"
+              },
+              {
+                "name": "model_failed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Confidence",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Found",
+          "type": "multilineText"
+        },
+        {
+          "name": "Status",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              {
+                "name": "New"
+              },
+              {
+                "name": "In progress"
+              },
+              {
+                "name": "Answered"
+              },
+              {
+                "name": "Closed"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Session",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Created",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "description": "Every number the agent argues with itself about. Changing behaviour is editing a row, not redeploying.",
+      "fields": [
+        {
+          "name": "Setting",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Value",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Note",
+          "type": "multilineText"
+        }
+      ]
+    },
+    {
+      "name": "Eval Runs",
+      "description": "One row per pass of evals/questions.yaml. Index version ties a score to the corpus it was measured on.",
+      "fields": [
+        {
+          "name": "Run",
+          "type": "singleLineText"
+        },
+        {
+          "name": "Started",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": {
+              "name": "iso"
+            },
+            "timeFormat": {
+              "name": "24hour"
+            },
+            "timeZone": "utc"
+          }
+        },
+        {
+          "name": "Questions",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Outcome accuracy",
+          "type": "number",
+          "options": {
+            "precision": 1
+          }
+        },
+        {
+          "name": "Citation accuracy",
+          "type": "number",
+          "options": {
+            "precision": 1
+          }
+        },
+        {
+          "name": "Answered",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Refused",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Wrong citation",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Median seconds",
+          "type": "number",
+          "options": {
+            "precision": 1
+          }
+        },
+        {
+          "name": "Cost",
+          "type": "number",
+          "options": {
+            "precision": 4
+          }
+        },
+        {
+          "name": "Chunks indexed",
+          "type": "number",
+          "options": {
+            "precision": 0
+          }
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText"
+        }
+      ]
+    }
+  ],
+  "seed": {
+    "Settings": [
+      {
+        "Setting": "Similarity threshold",
+        "Value": "0.55",
+        "Note": "Below this the model is never called and the question goes to a human. Measured on the sample corpus: real questions scored 0.654-0.758, off-topic ones 0.492-0.643. The score separates nonsense from questions; it cannot separate 'we have no answer' from 'this sounds like us'. That second job belongs to the citation check."
+      },
+      {
+        "Setting": "Confidence threshold",
+        "Value": "60",
+        "Note": "The model's own 0-100. Under this, an answer becomes a clarifying question or a ticket."
+      },
+      {
+        "Setting": "Top K",
+        "Value": "12",
+        "Note": "How many chunks the vector search returns before assembly."
+      },
+      {
+        "Setting": "Context chunks",
+        "Value": "5",
+        "Note": "How many survive assembly and reach the model."
+      },
+      {
+        "Setting": "Answer model",
+        "Value": "gemini-3.5-flash-lite",
+        "Note": "First choice."
+      },
+      {
+        "Setting": "Fallback model",
+        "Value": "gemini-3.5-flash",
+        "Note": "Used once, after the first choice fails or answers off-schema. Then the question goes to a human."
+      },
+      {
+        "Setting": "Always human",
+        "Value": "charged? (me|us)|why (was|were) (i|we) charged|refund me|cancel my (account|subscription|plan)|delete my (data|account)|close my account|speak to (a human|someone|a person|an agent)|talk to (a human|someone|a person)|lawyer|sue (you|your)|legal action|file a complaint|my invoice (number|from)|charge on my (card|account)",
+        "Note": "Actions and personal facts, not topics. 'Why was I charged' goes to a person; 'what happens if my card fails three times' is about the product and is answered from the documents. The rule is keywords, so it will sometimes be wrong in that direction — the eval set is where you see it."
+      },
+      {
+        "Setting": "Daily cost ceiling",
+        "Value": "2.00",
+        "Note": "In the currency of your model's bill. Past it the agent says it cannot answer right now and files a ticket."
+      },
+      {
+        "Setting": "Reply language",
+        "Value": "match",
+        "Note": "'match' replies in the language of the question. A language code (en, uk) forces one."
+      }
+    ],
+    "Sources": [
+      {
+        "Source": "Sample help centre (Harbourline)",
+        "Type": "markdown",
+        "Address": "/data/corpus",
+        "Status": "Active",
+        "Failures": 0,
+        "Note": "The made-up corpus that ships with the repo. Point a url source at your own help centre and set this one to Paused."
+      },
+      {
+        "Source": "Your help centre",
+        "Type": "url",
+        "Address": "https://example.com/help/pricing",
+        "Status": "Paused",
+        "Failures": 0,
+        "Note": "One row per page. Set Status to Active once the address is real."
+      }
+    ]
+  }
+}

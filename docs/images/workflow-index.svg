@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1032 850" width="1032" height="850" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, sans-serif">
+<style>.bg{fill:#fff}.t{fill:#111827}.s{fill:#6b7280}@media (prefers-color-scheme: dark){.bg{fill:#0d1117}.t{fill:#e6edf3}.s{fill:#9198a1}.box{filter:brightness(.8) saturate(1.1)}}</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa4b2"/></marker></defs>
+<rect class="bg" width="1032" height="850" fill="#ffffff"/>
+<text class="t" x="26" y="34" font-size="20" font-weight="600" fill="#111827">An indexing pass</text>
+<text class="s" x="26" y="56" font-size="13" fill="#6b7280">Documents are hashed before they are chunked and chunks before they are embedded, so a pass over an unchanged corpus costs nothing.</text>
+<path d="M238,123.0 L274,123.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M494,123.0 L530,123.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M750,123.0 L786,123.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M900.0,154 L900.0,175.0 L132.0,175.0 L132.0,188" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M238,227.0 L274,227.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M494,227.0 L530,227.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M750,227.0 L786,227.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M900.0,258 L900.0,279.0 L132.0,279.0 L132.0,292" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M238,331.0 L274,331.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M494,331.0 L530,331.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M750,331.0 L786,331.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M900.0,362 L900.0,383.0 L132.0,383.0 L132.0,396" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M238,435.0 L274,435.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M494,435.0 L530,435.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M750,435.0 L786,435.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M900.0,466 L900.0,487.0 L132.0,487.0 L132.0,500" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M238,539.0 L274,539.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M494,539.0 L530,539.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M750,539.0 L786,539.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M900.0,570 L900.0,591.0 L132.0,591.0 L132.0,604" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M238,643.0 L274,643.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M494,643.0 L530,643.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M750,643.0 L786,643.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M900.0,674 L900.0,695.0 L132.0,695.0 L132.0,708" fill="none" stroke="#9aa4b2" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<path d="M238,747.0 L274,747.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<path d="M494,747.0 L530,747.0" fill="none" stroke="#9aa4b2" stroke-width="1.8" marker-end="url(#a)"/>
+<rect class="box" x="26" y="92" width="212" height="62" rx="9" fill="#dcf2e6" stroke="#2f6f4f" stroke-width="1.7"/>
+<text x="35" y="107" font-size="10" fill="#2f6f4f" opacity=".65">1</text>
+<text x="132.0" y="127.0" text-anchor="middle" font-size="13.5" fill="#2f6f4f" font-weight="600">Index now</text>
+<rect class="box" x="282" y="92" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="291" y="107" font-size="10" fill="#2b5f9e" opacity=".65">2</text>
+<text x="388.0" y="127.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Read sources</text>
+<rect class="box" x="538" y="92" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="547" y="107" font-size="10" fill="#8a5a00" opacity=".65">3</text>
+<text x="644.0" y="127.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Load sources</text>
+<rect class="box" x="794" y="92" width="212" height="62" rx="9" fill="#eaecf0" stroke="#596070" stroke-width="1.7"/>
+<text x="803" y="107" font-size="10" fill="#596070" opacity=".65">4</text>
+<text x="900.0" y="127.0" text-anchor="middle" font-size="13.5" fill="#596070" font-weight="600">Route by type</text>
+<rect class="box" x="26" y="196" width="212" height="62" rx="9" fill="#eaecf0" stroke="#596070" stroke-width="1.7"/>
+<text x="35" y="211" font-size="10" fill="#596070" opacity=".65">5</text>
+<text x="132.0" y="231.0" text-anchor="middle" font-size="13.5" fill="#596070" font-weight="600">Read files</text>
+<rect class="box" x="282" y="196" width="212" height="62" rx="9" fill="#eaecf0" stroke="#596070" stroke-width="1.7"/>
+<text x="291" y="211" font-size="10" fill="#596070" opacity=".65">6</text>
+<text x="388.0" y="231.0" text-anchor="middle" font-size="13.5" fill="#596070" font-weight="600">Extract text</text>
+<rect class="box" x="538" y="196" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="547" y="211" font-size="10" fill="#8a5a00" opacity=".65">7</text>
+<text x="644.0" y="231.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Docs from files</text>
+<rect class="box" x="794" y="196" width="212" height="62" rx="9" fill="#eaecf0" stroke="#596070" stroke-width="1.7"/>
+<text x="803" y="211" font-size="10" fill="#596070" opacity=".65">8</text>
+<text x="900.0" y="231.0" text-anchor="middle" font-size="13.5" fill="#596070" font-weight="600">Merge docs</text>
+<rect class="box" x="26" y="300" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="35" y="315" font-size="10" fill="#2b5f9e" opacity=".65">9</text>
+<text x="132.0" y="335.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Read index</text>
+<rect class="box" x="282" y="300" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="291" y="315" font-size="10" fill="#8a5a00" opacity=".65">10</text>
+<text x="388.0" y="335.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Plan documents</text>
+<rect class="box" x="538" y="300" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="547" y="315" font-size="10" fill="#8a5a00" opacity=".65">11</text>
+<text x="644.0" y="335.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Chunk documents</text>
+<rect class="box" x="794" y="300" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="803" y="315" font-size="10" fill="#8a5a00" opacity=".65">12</text>
+<text x="900.0" y="335.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Collect ids</text>
+<rect class="box" x="26" y="404" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="35" y="419" font-size="10" fill="#2b5f9e" opacity=".65">13</text>
+<text x="132.0" y="439.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Check existing</text>
+<rect class="box" x="282" y="404" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="291" y="419" font-size="10" fill="#8a5a00" opacity=".65">14</text>
+<text x="388.0" y="439.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Plan embeddings</text>
+<rect class="box" x="538" y="404" width="212" height="62" rx="9" fill="#eaecf0" stroke="#596070" stroke-width="1.7"/>
+<text x="547" y="419" font-size="10" fill="#596070" opacity=".65">15</text>
+<text x="644.0" y="439.0" text-anchor="middle" font-size="13.5" fill="#596070" font-weight="600">Anything to embed?</text>
+<rect class="box" x="794" y="404" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="803" y="419" font-size="10" fill="#2b5f9e" opacity=".65">16</text>
+<text x="900.0" y="439.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Embed chunks</text>
+<rect class="box" x="26" y="508" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="35" y="523" font-size="10" fill="#8a5a00" opacity=".65">17</text>
+<text x="132.0" y="543.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Build points</text>
+<rect class="box" x="282" y="508" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="291" y="523" font-size="10" fill="#2b5f9e" opacity=".65">18</text>
+<text x="388.0" y="543.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Write points</text>
+<rect class="box" x="538" y="508" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="547" y="523" font-size="10" fill="#8a5a00" opacity=".65">19</text>
+<text x="644.0" y="543.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Plan cleanup</text>
+<rect class="box" x="794" y="508" width="212" height="62" rx="9" fill="#eaecf0" stroke="#596070" stroke-width="1.7"/>
+<text x="803" y="523" font-size="10" fill="#596070" opacity=".65">20</text>
+<text x="900.0" y="543.0" text-anchor="middle" font-size="13.5" fill="#596070" font-weight="600">Is an operation?</text>
+<rect class="box" x="26" y="612" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="35" y="627" font-size="10" fill="#2b5f9e" opacity=".65">21</text>
+<text x="132.0" y="647.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Apply cleanup</text>
+<rect class="box" x="282" y="612" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="291" y="627" font-size="10" fill="#8a5a00" opacity=".65">22</text>
+<text x="388.0" y="647.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Build index run</text>
+<rect class="box" x="538" y="612" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="547" y="627" font-size="10" fill="#2b5f9e" opacity=".65">23</text>
+<text x="644.0" y="647.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Write run</text>
+<rect class="box" x="794" y="612" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="803" y="627" font-size="10" fill="#8a5a00" opacity=".65">24</text>
+<text x="900.0" y="647.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Build source updates</text>
+<rect class="box" x="26" y="716" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="35" y="731" font-size="10" fill="#2b5f9e" opacity=".65">25</text>
+<text x="132.0" y="751.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Update source</text>
+<rect class="box" x="282" y="716" width="212" height="62" rx="9" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.7"/>
+<text x="291" y="731" font-size="10" fill="#2b5f9e" opacity=".65">26</text>
+<text x="388.0" y="751.0" text-anchor="middle" font-size="13.5" fill="#2b5f9e" font-weight="600">Fetch page</text>
+<rect class="box" x="538" y="716" width="212" height="62" rx="9" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.7"/>
+<text x="547" y="731" font-size="10" fill="#8a5a00" opacity=".65">27</text>
+<text x="644.0" y="751.0" text-anchor="middle" font-size="13.5" fill="#8a5a00" font-weight="600">Docs from url</text>
+<rect x="26" y="826" width="11" height="11" rx="3" fill="#dcf2e6" stroke="#2f6f4f" stroke-width="1.4"/>
+<text class="s" x="43" y="835.5" font-size="11.5" fill="#6b7280">trigger</text>
+<rect x="96.9" y="826" width="11" height="11" rx="3" fill="#dbe9fb" stroke="#2b5f9e" stroke-width="1.4"/>
+<text class="s" x="113.9" y="835.5" font-size="11.5" fill="#6b7280">Airtable / Qdrant / embeddings</text>
+<rect x="321.9" y="826" width="11" height="11" rx="3" fill="#ffeccc" stroke="#8a5a00" stroke-width="1.4"/>
+<text class="s" x="338.9" y="835.5" font-size="11.5" fill="#6b7280">code</text>
+<rect x="372.7" y="826" width="11" height="11" rx="3" fill="#eee2f8" stroke="#6b3fa0" stroke-width="1.4"/>
+<text class="s" x="389.7" y="835.5" font-size="11.5" fill="#6b7280">the model</text>
+<rect x="457.0" y="826" width="11" height="11" rx="3" fill="#d9f1fa" stroke="#1d7fa8" stroke-width="1.4"/>
+<text class="s" x="474.0" y="835.5" font-size="11.5" fill="#6b7280">alert</text>
+<rect x="514.5" y="826" width="11" height="11" rx="3" fill="#eaecf0" stroke="#596070" stroke-width="1.4"/>
+<text class="s" x="531.5" y="835.5" font-size="11.5" fill="#6b7280">routing</text>
+</svg>
