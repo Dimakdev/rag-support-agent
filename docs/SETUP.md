@@ -87,12 +87,22 @@ Set the sample source to `Paused`, index, and ask something only your documents 
 ## When something does not work
 
 **"Access to the file is not allowed"** — the folder is not in `N8N_RESTRICT_FILE_ACCESS_TO`, or not
-mounted into the container at all.
+mounted into the container at all. The compose file here does both for `./corpus`; a folder of your
+own needs a line beside it.
+
+**The deploy says it could not activate the workflow** — a node has an empty required parameter.
+Without a Telegram bot token and chat id that is what happens, so the deploy script disables the two
+Telegram nodes instead. If you see this with Telegram configured, open the workflow and look for the
+node marked with a warning triangle.
 
 **Airtable 403 on the first script** — the token does not have the base, or is missing a schema scope.
 
 **Qdrant refuses to connect from the workflow** — `QDRANT_URL` is the address *n8n* must use, not the
 one your browser uses. Inside this compose it is `http://qdrant:6333`.
+
+**The scripts cannot reach Qdrant, but the workflow can** — they run on your machine, where a Docker
+service name means nothing. They swap the name for `localhost` and assume port 6333; if you published
+it elsewhere, set `QDRANT_HOST_URL`.
 
 **A question answers but the sources are empty** — the citation check threw the answer away and the
 reply you are reading is the escalation. The ticket says which of the three checks failed.

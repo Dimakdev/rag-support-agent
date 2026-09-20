@@ -11,6 +11,7 @@ from __future__ import annotations
 import json
 import os
 import pathlib
+import re
 import sys
 import time
 import urllib.error
@@ -206,6 +207,22 @@ class Airtable:
         for i in range(0, len(record_ids), 10):
             qs = "&".join(f"records[]={urllib.parse.quote(r)}" for r in record_ids[i:i + 10])
             http("DELETE", f"{self.DATA}/{self.base_id}/{urllib.parse.quote(table)}?{qs}", self.headers)
+
+
+def qdrant_host_url(env: dict) -> str:
+    """QDRANT_URL is the address n8n uses, from inside its container. These scripts run on the host,
+    where a service name means nothing — and where the published port is not necessarily 6333.
+
+    Set QDRANT_HOST_URL when the guess below is wrong; it is right for the compose file as shipped.
+    """
+    if env.get("QDRANT_HOST_URL"):
+        return env["QDRANT_HOST_URL"].rstrip("/")
+    url = env.get("QDRANT_URL", "http://localhost:6333").rstrip("/")
+    for docker_name in ("qdrant", "host.docker.internal"):
+        url = url.replace(f"//{docker_name}:", "//localhost:")
+    if env.get("QDRANT_PORT"):
+        url = re.sub(r":\d+$", f":{env['QDRANT_PORT']}", url)
+    return url
 
 
 class Qdrant:

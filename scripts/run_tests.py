@@ -19,7 +19,7 @@ import urllib.request
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 from common import (Airtable, Gemini, N8n, Qdrant, ROOT, chunk_hash, fnv128, load_env,  # noqa: E402
-                    load_state, point_id, require)
+                    load_state, point_id, qdrant_host_url, require)
 
 results: list[bool | None] = []
 
@@ -32,9 +32,7 @@ def check(what: str, ok: bool | None, detail: str = "") -> None:
 
 def local_qdrant(env: dict) -> Qdrant:
     """The workflow reaches Qdrant from inside a container; this script reaches it from the host."""
-    url = (env["QDRANT_URL"].replace("host.docker.internal", "localhost")
-           .replace("//qdrant:", "//localhost:"))
-    return Qdrant(url, env.get("QDRANT_COLLECTION", "docs"))
+    return Qdrant(qdrant_host_url(env), env.get("QDRANT_COLLECTION", "docs"))
 
 
 def ask(env, state, question, session=None, timeout=120):

@@ -21,7 +21,7 @@ import urllib.request
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
-from common import Airtable, Qdrant, ROOT, load_env, load_state, require  # noqa: E402
+from common import Airtable, Qdrant, ROOT, load_env, load_state, qdrant_host_url, require  # noqa: E402
 
 QUESTIONS = ROOT / "evals" / "questions.json"
 
@@ -134,8 +134,7 @@ def main() -> None:
     if args.no_write:
         return
 
-    qd = Qdrant(env["QDRANT_URL"].replace("host.docker.internal", "localhost")
-                .replace("//qdrant:", "//localhost:"), env.get("QDRANT_COLLECTION", "docs"))
+    qd = Qdrant(qdrant_host_url(env), env.get("QDRANT_COLLECTION", "docs"))
     try:
         indexed = qd.count(only_active=True)
     except Exception:  # noqa: BLE001

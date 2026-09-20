@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 from common import (Gemini, HttpError, N8n, Qdrant, ROOT, load_env, load_state,  # noqa: E402
-                    require, save_state)
+                    qdrant_host_url, require, save_state)
 
 CREDENTIALS = [
     # key in state, placeholder, n8n credential type, display name, builder(env) -> data or None
@@ -63,7 +63,7 @@ def ensure_credentials(n8n: N8n, env: dict, state: dict, dry: bool) -> dict:
 def ensure_collection(env: dict, dry: bool) -> None:
     # The workflow reaches Qdrant from inside n8n; this script reaches it from the host. Same server,
     # different address when n8n is in Docker, which is why the host address is derived and not reused.
-    url = env["QDRANT_URL"].replace("host.docker.internal", "localhost").replace("//qdrant:", "//localhost:")
+    url = qdrant_host_url(env)
     qd = Qdrant(url, env.get("QDRANT_COLLECTION", "docs"))
     if dry:
         print(f"  qdrant: would ensure collection '{qd.collection}' at {url}")
@@ -119,9 +119,23 @@ def main() -> None:
         **cred_ids,
     }
 
+    # Telegram is optional, and n8n refuses to activate a workflow that has a node with an empty
+    # required parameter. Left alone, an install without a bot token gets a workflow that cannot be
+    # published, so no webhook is registered and the chat page answers 404 — with nothing on screen
+    # to say why. A disabled node passes its input straight through, which is exactly what is wanted.
+    telegram_ready = bool(env.get("TELEGRAM_BOT_TOKEN") and env.get("TELEGRAM_CHAT_ID"))
+
     def upsert(key: str, path: str, extra: dict | None = None) -> str | None:
         raw = (ROOT / path).read_text(encoding="utf-8")
         body = json.loads(substitute(raw, {**mapping, **(extra or {})}))
+        if not telegram_ready:
+            muted = [n["name"] for n in body["nodes"] if n["type"].endswith(".telegram")]
+            for n in body["nodes"]:
+                if n["type"].endswith(".telegram"):
+                    n["disabled"] = True
+            if muted:
+                print(f"  {path}: no Telegram in .env, so {', '.join(muted)} "
+                      f"{'is' if len(muted) == 1 else 'are'} disabled. Tickets are still written.")
         if args.dry:
             print(f"  would deploy {path}: {len(body['nodes'])} nodes")
             return None
